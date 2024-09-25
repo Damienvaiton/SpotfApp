@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SongController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 0.5em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; align-items: center ; justify-content: center; display: flex; flex-direction: column; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .box { display: flex; flex-direction: column; align-items: center; justify-content: center; border: black 1px solid; padding: 10px; margin: 10px; }
+
+</style>
+
+<div class="example-wrapper" >
+
+    <h1>Playlist</h1>
+
+    {% for track in playlist.items %}
+        <div class="example-wrapper box">
+            <img width="100dp" height="100dp" src="{{ track.track.album.images[0].url }}" alt="{{ track.track.album.name }}">
+            <h2>{{ track.track.name }}</h2>
+            <p>{{ track.track.artists[0].name }}</p>
+            <p>{{ track.track.album.name }}</p>
+        </div>
+    {% endfor
+    %}
+
+
+
+</div>
+{% endblock %}
