@@ -2,6 +2,16 @@
 
 {% block title %}Hello SongController!{% endblock %}
 
+
+{% block stylesheets %}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+{% endblock %}
+
 {% block body %}
     <style>
         .example-wrapper { margin: 0.5em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; align-items: center ; justify-content: center; display: flex; flex-direction: column; }
@@ -9,26 +19,36 @@
 
     </style>
 
-    <div class="example-wrapper" >
+    <div class="container">
+        <h1 class="my-4 text-center">Search for Tracks</h1>
 
-        {{ form(form) }}
+        <!-- Formulaire de recherche -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-8">
+                {{ form(form) }}
+            </div>
+        </div>
 
-
-        {% if tracks is defined and tracks is not empty and tracks is not null %}
-            {% for track in tracks %}
-                <div class="example-wrapper box">
-                    <img width="100dp" height="100dp" src="{{ track.pictureLink }}" alt="{{ track.albumname }}">
-                    <h2>{{ track.name }}</h2>
-                    <p>{{ track.artistname }}</p>
-                    <p>{{ track.albumname }}</p>
-                </div>
-            {% endfor %}
+        <!-- Résultats de recherche -->
+        <div class="row">
+            {% if tracks is defined and tracks is not empty and tracks is not null %}
+                {% for track in tracks %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <img src="{{ track.pictureLink }}" class="card-img-top" alt="{{ track.albumname }}" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ track.name }}</h5>
+                                <p class="card-text">Artist: {{ track.artistname }}</p>
+                                <p class="card-text">Album: {{ track.albumname }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             {% else %}
-            <h2>No track found</h2>
-        {% endif %}
-
-
-
-
+                <div class="col-12">
+                    <h2 class="text-center">No track found</h2>
+                </div>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}

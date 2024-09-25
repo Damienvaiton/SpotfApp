@@ -29,7 +29,7 @@ class SongController extends AbstractController
     }
 
 
-    #[Route('/', name: 'app_song')]
+    #[Route('/song', name: 'app_song')]
     public function index(): Response
     {
 
@@ -40,12 +40,34 @@ class SongController extends AbstractController
         ]);
     }
 
-    #[Route('/song', name: 'app_songsearch')]
+    #[Route('/song/{id}', name: 'app_songdetail')]
+    public function detail(string $id): Response
+    {
+        $track = $this->GetDetailTrack($id);
+        $recommendations = $this->GetRecommendationTrack($id);
+        dump($recommendations);
+        dump($track);
+        return $this->render('song/detail.html.twig', [
+            'controller_name' => 'SongController',
+            'track' => $track,
+            'recommendations' => $recommendations,
+        ]);
+    }
+
+    #[Route('/', name: 'app_songsearch')]
     public function search(Request $request): Response
     {
         $tracks = [];
         $form = $this->createFormBuilder()
-            ->add('search', TextType::class )
+            ->add('search', TextType::class, [
+                'label' => 'Search for a song',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Enter a song name',
+                    'required' => false,
+
+                ]
+            ])
             ->add('submit', SubmitType::class)
             ->setMethod('GET')
             ->getForm();
@@ -56,7 +78,7 @@ class SongController extends AbstractController
             $search = $data['search'];
 
             if (empty($search)) {
-                return $this->redirectToRoute('/');
+                return $this->redirectToRoute('app_song');
             }
 
             $tracksresult = $this->GetTrackFromName($search);
@@ -116,9 +138,48 @@ class SongController extends AbstractController
 
         $client = HttpClient::create();
         //
-        $PlaylistId = '6eDhGHcVRS9wUaUdw0L75a';
+        $PlaylistId = '0DBSQZkaJn6DDY4eyM3044';
 
         $response = $client->request('GET', 'https://api.spotify.com/v1/playlists/'.$PlaylistId.'/tracks', [
+            'headers' => [
+                'authorization' => 'Bearer '.$this->token,
+
+        ]
+        ]);
+
+        dump($response->toArray());
+
+        return $response->toArray();
+
+    }
+
+
+    public function GetDetailTrack (string $id) : array
+    {
+
+        $client = HttpClient::create();
+        //
+        $TrackId = $id;
+
+        $response = $client->request('GET', 'https://api.spotify.com/v1/tracks/'.$TrackId, [
+            'headers' => [
+                'authorization' => 'Bearer '.$this->token,
+
+        ]
+        ]);
+
+        return $response->toArray();
+
+    }
+
+    public function GetRecommendationTrack (string $id) : array
+    {
+
+        $client = HttpClient::create();
+        //
+        $TrackId = $id;
+
+        $response = $client->request('GET', 'https://api.spotify.com/v1/recommendations?seed_tracks='.$TrackId, [
             'headers' => [
                 'authorization' => 'Bearer '.$this->token,
 

@@ -2,6 +2,16 @@
 
 {% block title %}Hello SongController!{% endblock %}
 
+
+{% block stylesheets %}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+{% endblock %}
+
 {% block body %}
 <style>
     .example-wrapper { margin: 0.5em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; align-items: center ; justify-content: center; display: flex; flex-direction: column; }
@@ -12,17 +22,27 @@
 
 <div class="example-wrapper" >
 
-    <h1>Playlist</h1>
+    <div class="container">
+        <h1 class="my-4 text-center">Playlist</h1>
 
-    {% for track in playlist.items %}
-        <div class="example-wrapper box">
-            <img width="100dp" height="100dp" src="{{ track.track.album.images[0].url }}" alt="{{ track.track.album.name }}">
-            <h2>{{ track.track.name }}</h2>
-            <p>{{ track.track.artists[0].name }}</p>
-            <p>{{ track.track.album.name }}</p>
+        <div class="row">
+            {% for track in playlist.items %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        {% if track.track.album.images[0] is defined  %}
+                        <img src="{{ track.track.album.images[0].url }}" class="card-img-top" alt="{{ track.track.album.name }}" style="height: 200px; object-fit: cover;">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ track.track.name }}</h5>
+                            <p class="card-text">Artist: {{ track.track.artists[0].name }}</p>
+                            <p class="card-text">Album: {{ track.track.album.name }}</p>
+                        </div>
+
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-    {% endfor
-    %}
+    </div>
 
 
 
