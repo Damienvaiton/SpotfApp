@@ -22,8 +22,7 @@ class SongController extends AbstractController
     private string $token;
 
     public function __construct(
-        private AuthSpotifyService  $authSpotifyService,
-        private HttpClientInterface $httpClient,
+        private readonly AuthSpotifyService $authSpotifyService,
 
     )
     {
