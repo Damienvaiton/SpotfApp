@@ -13,6 +13,7 @@ class TrackFactory
             $track['duration_ms'],
             $track['explicit'],
             $track['external_ids']['isrc'],
+            $track['album']['name'],
             $track['external_urls']['spotify'],
             $this->feats($track),
             $track['href'],
@@ -42,8 +43,7 @@ class TrackFactory
     {
         $track = [];
         foreach ($tracks['items'] as $tr) {
-            dump($tr);
-            $track = $this->createfromAPI($tr);
+            array_push($track, $this->createfromAPI($tr));
         }
         return $track;
     }

@@ -9,6 +9,8 @@ class Track
     private bool $explicit;
     private string $isrc;
 
+    private string $albumname;
+
     private string $artists;
     private string $spotifyUrl;
     private string $href;
@@ -27,6 +29,7 @@ class Track
         int $durationMs,
         bool $explicit,
         string $isrc,
+        string $albumname,
         string $spotifyUrl,
         string $artists,
         string $href,
@@ -45,6 +48,7 @@ class Track
         $this->explicit = $explicit;
         $this->isrc = $isrc;
         $this->spotifyUrl = $spotifyUrl;
+        $this->albumname = $albumname;
         $this->artists = $artists;
         $this->href = $href;
         $this->id = $id;
@@ -137,5 +141,10 @@ class Track
     public function getPictureLink(): string
     {
         return $this->pictureLink;
+    }
+
+    public function getAlbumName(): string
+    {
+        return $this->albumname;
     }
 }

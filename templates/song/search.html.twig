@@ -37,10 +37,9 @@
                         <div class="card h-100 shadow-sm">
                             <img src="{{ track.pictureLink }}" class="card-img-top" alt="{{ track.albumname }}" style="height: 200px; object-fit: cover;">
                             <div class="card-body" onclick="
-                                window.location.href = '{{ path('app_songdetail', {'id': track.id}) }}';
-">
+                                window.location.href = '{{ path('app_songdetail', {'id': track.id}) }}';">
                                 <h5 class="card-title">{{ track.name }}</h5>
-                                <p class="card-text">Artist: {{ track.artistname }}</p>
+                                <p class="card-text">Artist: {{ track.artists }}</p>
                                 <p class="card-text">Album: {{ track.albumname }}</p>
                             </div>
                         </div>

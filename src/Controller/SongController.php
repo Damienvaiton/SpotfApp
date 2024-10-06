@@ -92,8 +92,6 @@ class SongController extends AbstractController
 
             $tracksresult = $this->GetTrackFromName($search);
 
-            dump($tracksresult);
-
             $searchfactory = new TrackFactory();
             $tracks = $searchfactory->createfromAPIArray($tracksresult['tracks']);
 
@@ -140,10 +138,8 @@ class SongController extends AbstractController
         $response = $client->request('GET', 'https://api.spotify.com/v1/search?q='.$search.'&type=track', [
             'headers' => [
                 'authorization' => 'Bearer '.$this->token,
-                'limit' => 10,
                 ]
         ]);
-
 
         return $response->toArray();
         }
@@ -191,7 +187,6 @@ class SongController extends AbstractController
     {
 
         $client = HttpClient::create();
-        //
         $TrackId = $id;
 
         $response = $client->request('GET', 'https://api.spotify.com/v1/recommendations?seed_tracks='.$TrackId, [
