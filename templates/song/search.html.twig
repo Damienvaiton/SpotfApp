@@ -1,10 +1,11 @@
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello SongController!{% endblock %}
 
-
 {% block stylesheets %}
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}
 
 {% block javascripts %}
@@ -14,9 +15,19 @@
 
 {% block body %}
     <style>
-        .example-wrapper { margin: 0.5em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; align-items: center ; justify-content: center; display: flex; flex-direction: column; }
+        .example-wrapper { margin: 0.5em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; align-items: center; justify-content: center; display: flex; flex-direction: column; }
         .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-
+        .heart {
+            position: absolute;
+            top: 10px; /* Ajustez la position selon vos besoins */
+            right: 10px; /* Ajustez la position selon vos besoins */
+            color: red; /* Couleur du cœur */
+            font-size: 24px; /* Taille du cœur */
+            cursor: pointer; /* Curseur de la souris lors du survol */
+        }
+        .card {
+            position: relative; /* Nécessaire pour positionner l'icône à l'intérieur de la carte */
+        }
     </style>
 
     <div class="container">
@@ -36,8 +47,16 @@
                     <div class="col-md-4 mb-4">
                         <div class="card h-100 shadow-sm">
                             <img src="{{ track.pictureLink }}" class="card-img-top" alt="{{ track.albumname }}" style="height: 200px; object-fit: cover;">
-                            <div class="card-body" onclick="
-                                window.location.href = '{{ path('app_songdetail', {'id': track.id}) }}';">
+
+                            <div class="heart" onclick="window.location.href = '{{ path('app_favorite', {'id': track.id}) }}';">
+                                {% if track.isFavorite %}
+                                    <i class="fas fa-heart"></i> <!-- Cœur plein -->
+                                {% else %}
+                                    <i class="far fa-heart"></i> <!-- Cœur vide -->
+                                {% endif %}
+                            </div>
+
+                            <div class="card-body" onclick="window.location.href = '{{ path('app_songdetail', {'id': track.id}) }}';">
                                 <h5 class="card-title">{{ track.name }}</h5>
                                 <p class="card-text">Artist: {{ track.artists }}</p>
                                 <p class="card-text">Album: {{ track.albumname }}</p>

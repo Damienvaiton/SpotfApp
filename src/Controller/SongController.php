@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Track;
 use App\Factory\TrackFactory;
 use App\service\AuthSpotifyService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -47,7 +49,9 @@ class SongController extends AbstractController
     #[Route('/song/{id}', name: 'app_songdetail')]
     public function detail(string $id): Response
     {
+
         $trackresult = $this->GetDetailTrack($id);
+        
         $recommendations = $this->GetRecommendationTrack($id);
 
         $trackfactory = new TrackFactory();
@@ -61,10 +65,49 @@ class SongController extends AbstractController
         ]);
     }
 
+    #[Route('/favorite/{id}', name: 'app_favorite')]
+    public function Favorite(EntityManagerInterface $entityManager, string $id)
+    {
+
+
+
+
+
+        $track = $this->GetTrackFromId($id);
+
+        $firdtrack = $entityManager->getRepository(Track::class)->findOneBy(['id' => $id]);
+        if ($firdtrack === null) {
+            $track->setFavorite(true);
+            $entityManager->persist($track);
+        } else {
+            $firdtrack->setFavorite(false);
+            $entityManager->remove($firdtrack);
+        }
+        $entityManager->flush();
+
+
+        return $this->redirectToRoute('app_songdetail', ['id' => $id]);
+
+      
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     #[Route('/', name: 'app_songsearch')]
-    public function search(Request $request): Response
+    public function search(Request $request, EntityManagerInterface $entityManager): Response
     {
         $tracks = [];
         $form = $this->createFormBuilder()
@@ -92,11 +135,16 @@ class SongController extends AbstractController
 
             $tracksresult = $this->GetTrackFromName($search);
 
-            $searchfactory = new TrackFactory();
-            $tracks = $searchfactory->createfromAPIArray($tracksresult['tracks']);
 
-            dump($tracks);
 
+            $trackfactory = new TrackFactory();
+            $tracks = $trackfactory->createfromAPIArray($tracksresult['tracks']);
+            foreach ($tracks as $track) {
+                $firdtrack = $entityManager->getRepository(Track::class)->findOneBy(['id' => $track->getId()]);
+                if ($firdtrack !== null) {
+                    $track->setFavorite(true);
+                }
+            }
         }
         return $this->render('song/search.html.twig', [
                 'controller_name' => 'SongController',
@@ -140,6 +188,14 @@ class SongController extends AbstractController
                 'authorization' => 'Bearer '.$this->token,
                 ]
         ]);
+
+
+
+
+
+
+
+
 
         return $response->toArray();
         }
@@ -198,6 +254,24 @@ class SongController extends AbstractController
 
         return $response->toArray();
 
+    }
+
+
+    public function GetTrackFromId(string $id) : Track
+    {
+        $client = HttpClient::create();
+        $response = $client->request('GET', 'https://api.spotify.com/v1/tracks/'.$id, [
+            'headers' => [
+                'authorization' => 'Bearer '.$this->token,
+                ]
+        ]);
+
+        $track = $response->toArray();
+        $trackfactory = new TrackFactory();
+        $result = $trackfactory->createfromAPI($track);
+        dump($result);
+        return $result;
+        
     }
 
 }

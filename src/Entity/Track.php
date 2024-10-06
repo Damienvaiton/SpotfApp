@@ -2,27 +2,75 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
+
+#[ORM\Entity]
 class Track
 {
+   #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private int $dbid;
+
+
+   #[ORM\Column(type: 'integer')]
     private int $discNumber;
+
+   #[ORM\Column(type: 'integer')]
     private int $durationMs;
+
+    #[ORM\Column(type: 'boolean')]
     private bool $explicit;
+
+    #[ORM\Column(type: 'string')]
     private string $isrc;
 
+
+    #[ORM\Column(type: 'string')]
     private string $albumname;
 
+
+    #[ORM\Column(type: 'string')]
     private string $artists;
+
+    #[ORM\Column(type: 'string')]
     private string $spotifyUrl;
+
+    #[ORM\Column(type: 'string')]
     private string $href;
+
+    #[ORM\Column(type: 'string')]
     private string $id;
+
+    #[ORM\Column(type: 'boolean')]
     private bool $isLocal;
+
+    #[ORM\Column(type: 'string')]
     private string $name;
+
+    #[ORM\Column(type: 'integer')]
     private int $popularity;
+
+    #[ORM\Column(type: 'string', nullable: true)]
     private ?string $previewUrl;
+
+    #[ORM\Column(type: 'integer')]
     private int $trackNumber;
+
+    #[ORM\Column(type: 'string')]
     private string $type;
+
+    #[ORM\Column(type: 'string')]
     private string $uri;
+
+    #[ORM\Column(type: 'string')]
     private ?string $pictureLink;
+
+    #[ORM\Column]
+    private ?bool $isFavorite = null;
+
+
 
     public function __construct(
         int $discNumber,
@@ -60,6 +108,7 @@ class Track
         $this->type = $type;
         $this->uri = $uri;
         $this->pictureLink = $pictureLink;
+        $this->isFavorite = false;
     }
 
     // Getters for all properties
@@ -147,4 +196,17 @@ class Track
     {
         return $this->albumname;
     }
+
+    public function isFavorite(): ?bool
+    {
+        return $this->isFavorite;
+    }
+
+    public function setFavorite(bool $isFavorite): static
+    {
+        $this->isFavorite = $isFavorite;
+
+        return $this;
+    }
+
 }
