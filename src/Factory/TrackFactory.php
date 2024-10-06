@@ -14,12 +14,13 @@ class TrackFactory
             $track['explicit'],
             $track['external_ids']['isrc'],
             $track['external_urls']['spotify'],
+            $this->feats($track),
             $track['href'],
             $track['id'],
             $track['is_local'],
             $track['name'],
             $track['popularity'],
-            $track['preview_url'],
+            $track['preview_url'] ?? null,
             $track['track_number'],
             $track['type'],
             $track['uri'],
@@ -27,12 +28,22 @@ class TrackFactory
         );
     }
 
+    public function feats(array $track) : string
+    {
+        $feats = '';
+        foreach ($track['artists'] as $artist) {
+            $feats .= $artist['name'] . ', ';
+        }
+        return substr($feats, 0, -2);
+    }
+
 
     public function createfromAPIArray(array $tracks) : array
     {
         $track = [];
-        foreach ($tracks['items'] as $track) {
-            $track[] = $this->createfromAPI($track);
+        foreach ($tracks['items'] as $tr) {
+            dump($tr);
+            $track = $this->createfromAPI($tr);
         }
         return $track;
     }

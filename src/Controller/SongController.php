@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Factory\SearchedTrackFactory;
+use App\Factory\TrackFactory;
 use App\service\AuthSpotifyService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -29,6 +29,8 @@ class SongController extends AbstractController
     }
 
 
+
+
     #[Route('/song', name: 'app_song')]
     public function index(): Response
     {
@@ -40,19 +42,26 @@ class SongController extends AbstractController
         ]);
     }
 
+
+
     #[Route('/song/{id}', name: 'app_songdetail')]
     public function detail(string $id): Response
     {
-        $track = $this->GetDetailTrack($id);
+        $trackresult = $this->GetDetailTrack($id);
         $recommendations = $this->GetRecommendationTrack($id);
-        dump($recommendations);
+
+        $trackfactory = new TrackFactory();
+        $track = $trackfactory->createfromAPI($trackresult);
         dump($track);
+
         return $this->render('song/detail.html.twig', [
             'controller_name' => 'SongController',
             'track' => $track,
             'recommendations' => $recommendations,
         ]);
     }
+
+
 
     #[Route('/', name: 'app_songsearch')]
     public function search(Request $request): Response
@@ -83,11 +92,14 @@ class SongController extends AbstractController
 
             $tracksresult = $this->GetTrackFromName($search);
 
-            $searchfactory = new SearchedTrackFactory();
-            $tracks = $searchfactory->createFromSpotifyApiArray($tracksresult);
+            dump($tracksresult);
+
+            $searchfactory = new TrackFactory();
+            $tracks = $searchfactory->createfromAPIArray($tracksresult['tracks']);
+
+            dump($tracks);
 
         }
-        dump("tracks", $tracks);
         return $this->render('song/search.html.twig', [
                 'controller_name' => 'SongController',
                 'form' => $form,
@@ -98,7 +110,10 @@ class SongController extends AbstractController
 
 
 
-
+// Fonctions GET
+//
+//
+//
 
     public function GetTrack () : array
     {

@@ -8,6 +8,8 @@ class Track
     private int $durationMs;
     private bool $explicit;
     private string $isrc;
+
+    private string $artists;
     private string $spotifyUrl;
     private string $href;
     private string $id;
@@ -26,6 +28,7 @@ class Track
         bool $explicit,
         string $isrc,
         string $spotifyUrl,
+        string $artists,
         string $href,
         string $id,
         bool $isLocal,
@@ -42,6 +45,7 @@ class Track
         $this->explicit = $explicit;
         $this->isrc = $isrc;
         $this->spotifyUrl = $spotifyUrl;
+        $this->artists = $artists;
         $this->href = $href;
         $this->id = $id;
         $this->isLocal = $isLocal;
@@ -73,6 +77,11 @@ class Track
     public function getIsrc(): string
     {
         return $this->isrc;
+    }
+
+    public function getArtists(): string
+    {
+        return $this->artists;
     }
 
     public function getSpotifyUrl(): string
