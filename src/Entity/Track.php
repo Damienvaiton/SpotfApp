@@ -11,7 +11,7 @@ class Track
    #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private int $dbid;
+    private int $id;
 
 
    #[ORM\Column(type: 'integer')]
@@ -41,7 +41,7 @@ class Track
     private string $href;
 
     #[ORM\Column(type: 'string')]
-    private string $id;
+    private string $idspotify;
 
     #[ORM\Column(type: 'boolean')]
     private bool $isLocal;
@@ -81,7 +81,7 @@ class Track
         string $spotifyUrl,
         string $artists,
         string $href,
-        string $id,
+        string $idspotify,
         bool $isLocal,
         string $name,
         int $popularity,
@@ -99,7 +99,7 @@ class Track
         $this->albumname = $albumname;
         $this->artists = $artists;
         $this->href = $href;
-        $this->id = $id;
+        $this->idspotify = $idspotify;
         $this->isLocal = $isLocal;
         $this->name = $name;
         $this->popularity = $popularity;
@@ -147,9 +147,9 @@ class Track
         return $this->href;
     }
 
-    public function getId(): string
+    public function getIdSpotify(): string
     {
-        return $this->id;
+        return $this->idspotify;
     }
 
     public function isLocal(): bool

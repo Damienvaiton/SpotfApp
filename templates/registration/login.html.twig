@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SongController!{% endblock %}
+
+
+{% block stylesheets %}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+{% endblock %}
+
+{% block body %}
+    <style>
+
+    </style>
+
+    <div class="example-wrapper" >
+        <h1>Login</h1>
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    {{ form_start(form, {'method': 'POST'}) }}
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.password) }}
+                    {{ form_row(form.login) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <a href="{{ path('app_register') }}">Register</a>
+                </div>
+        </div>
+    </div>
+
+{% endblock %}
