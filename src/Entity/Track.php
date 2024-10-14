@@ -110,7 +110,6 @@ class Track
         $this->isFavorite = false;
     }
 
-    // Getters for all properties
     public function getDiscNumber(): int
     {
         return $this->discNumber;

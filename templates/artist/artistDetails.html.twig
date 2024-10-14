@@ -1,0 +1,157 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Artist on Spotify{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #191414;
+            color: #fff;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        .artist-card {
+            margin: 2em auto;
+            max-width: 500px;
+            border-radius: 10px;
+            background-color: #282828;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+        .artist-card:hover {
+            transform: translateY(-5px);
+        }
+        .artist-header {
+            background-color: #1DB954;
+            text-align: center;
+            padding: 1.5em;
+            border-radius: 10px 10px 0 0;
+        }
+        .artist-header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+        .artist-image {
+            max-height: 250px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        .artist-image img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .artist-image img:hover {
+            transform: scale(1.05);
+        }
+        .artist-info {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .artist-info p {
+            margin: 0.5em 0;
+            font-size: 16px;
+            color: #b3b3b3;
+        }
+        .artist-info i {
+            color: #1DB954;
+            margin-right: 6px;
+        }
+        h2 {
+            margin-top: 2em;
+            font-size: 22px;
+            color: #1DB954;
+            border-bottom: 2px solid #1DB954;
+            padding-bottom: 0.5em;
+        }
+        .album-card {
+            background-color: #282828;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s;
+        }
+        .album-card:hover {
+            transform: scale(1.03);
+        }
+        .album-card img {
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease-in-out;
+        }
+        .album-card img:hover {
+            transform: scale(1.05);
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="text-center mb-4">Artist Details</h1>
+
+        <div class="artist-card">
+            <div class="artist-header">
+                <h1>{{ artist.name }}</h1>
+            </div>
+            <div class="artist-body">
+                <div class="artist-image">
+                    <img src="{{ artist.imagesUrl }}" alt="Image de l'artiste {{ artist.name }}">
+                </div>
+                <div class="artist-info">
+                    <p><i class="fas fa-user"></i> Followers: {{ artist.followers }}</p>
+                    <p><i class="fas fa-headphones"></i> Popularity: {{ artist.popularity }}</p>
+                </div>
+            </div>
+        </div>
+
+        <h2>Albums</h2>
+        <div class="row">
+            {% for album in albums.items %}
+                {% if album.album_type == "album" %}
+                    <div class="col-md-4 mb-4">
+                        <div class="album-card">
+                            <img src="{{ album.images[0].url }}" class="card-img-top" alt="Image de l'album {{ album.name }}">
+                            <div class="album-body p-3">
+                                <h5 class="card-title">Name: {{ album.name }}</h5>
+                                <p class="card-text">Release date: {{ album.release_date }}</p>
+                                <p class="card-text">Total tracks: {{ album.total_tracks }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <h2>Artists Similaires</h2>
+        <div class="row">
+            {% for recommendation in recommendations.artists %}
+                <div class="col-md-4 mb-4">
+                    <div class="album-card">
+                        <div class="album-body p-3">
+                            {% if recommendation.images is defined and recommendation.images is not empty %}
+                                <img src="{{ recommendation.images[0].url }}" class="card-img-top" alt="Image de l'artiste {{ recommendation.name }}">
+                            {% endif %}
+                            <h5 class="card-title">{{ recommendation.name }}</h5>
+                            <p class="card-text">Followers: {{ recommendation.followers.total }}</p>
+                            <p class="card-text">Popularity: {{ recommendation.popularity }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

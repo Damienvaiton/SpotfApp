@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ artist.name }} - Artist on Spotify{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}
+
+{% block body %}
+    <style>
+        body {
+            background-color: #191414;
+            color: white;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        .artist-card {
+            margin: 2em auto;
+            max-width: 600px;
+            border-radius: 15px;
+            overflow: hidden;
+            background-color: #282828;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        .artist-header {
+            background-color: #1DB954;
+            text-align: center;
+            padding: 1.5em 0;
+        }
+        .artist-header h1 {
+            margin: 0;
+            font-size: 26px;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+        .artist-body {
+            padding: 20px;
+        }
+        .artist-image {
+            width: 100%;
+            height: auto;
+            border-bottom: 2px solid #1DB954;
+        }
+        .artist-info {
+            margin-top: 15px;
+        }
+        .artist-info p {
+            margin: 0.5em 0;
+            font-size: 18px;
+            color: #b3b3b3;
+        }
+        .artist-info p a {
+            color: #1DB954;
+            text-decoration: none;
+        }
+        .artist-info p a:hover {
+            text-decoration: underline;
+        }
+        .artist-info i {
+            color: #1DB954;
+            margin-right: 8px;
+        }
+        .followers, .popularity {
+            display: flex;
+            align-items: center;
+        }
+        .followers {
+            margin-bottom: 1em;
+        }
+        /* Spotify theme buttons */
+        .spotify-button {
+            display: inline-block;
+            background-color: #1DB954;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            text-decoration: none;
+        }
+        .spotify-button:hover {
+            background-color: #1ed760;
+        }
+    </style>
+
+    <div class="artist-card">
+        <div class="artist-header">
+            <h1>{{ artist.name }}</h1>
+        </div>
+        <div class="artist-body">
+            <img class="artist-image" src="{{ artist.imagesUrl }}" alt="{{ artist.name }}">
+            <div class="artist-info">
+                <p class="followers"><i class="fas fa-user-friends"></i>{{ artist.followers|number_format(0, '.', ' ') }} Followers</p>
+                <p class="popularity"><i class="fas fa-chart-line"></i>Popularity: {{ artist.popularity }}</p>
+                <p><i class="fas fa-music"></i>Type: {{ artist.type }}</p>
+                <p><i class="fas fa-link"></i><a href="{{ artist.href }}" target="_blank">Visit on Spotify</a></p>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

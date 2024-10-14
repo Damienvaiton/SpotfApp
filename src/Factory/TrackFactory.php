@@ -45,6 +45,7 @@ class TrackFactory
         foreach ($tracks['items'] as $tr) {
             array_push($track, $this->createfromAPI($tr));
         }
+
         return $track;
     }
 }
