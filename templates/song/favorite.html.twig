@@ -11,6 +11,7 @@
             color: #ffffff; /* Couleur du texte blanche */
             font-family: 'Helvetica Neue', Arial, sans-serif; /* Police similaire à celle de Spotify */
         }
+
         .example-wrapper {
             margin: 0.5em auto;
             max-width: 800px;
@@ -21,6 +22,7 @@
             display: flex;
             flex-direction: column;
         }
+
         .heart {
             position: absolute;
             top: 10px;
@@ -30,25 +32,30 @@
             cursor: pointer;
             transition: transform 0.2s;
         }
+
         .heart:hover {
             transform: scale(1.2);
         }
+
         .card {
             position: relative;
             transition: transform 0.2s;
             background-color: #282828; /* Couleur de fond des cartes */
             border-radius: 8px; /* Coins arrondis */
         }
+
         .card:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Ombre au survol */
         }
+
         .card-img-top {
             height: 200px;
             object-fit: cover;
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
         }
+
         .btn-primary {
             background-color: #1db954; /* Couleur de bouton de Spotify */
             border-color: #1db954;
@@ -83,7 +90,8 @@
                         <div class="card h-100 shadow-sm">
                             <img src="{{ track.pictureLink }}" class="card-img-top" alt="{{ track.albumname }}">
 
-                            <div class="heart" onclick="window.location.href = '{{ path('app_favorite', {'id': track.idspotify}) }}';">
+                            <div class="heart"
+                                 onclick="window.location.href = '{{ path('app_favorite', {'id': track.idspotify}) }}';">
                                 {% if track.isFavorite %}
                                     <i class="fas fa-heart"></i> <!-- Cœur plein -->
                                 {% else %}
@@ -91,7 +99,8 @@
                                 {% endif %}
                             </div>
 
-                            <div class="card-body" onclick="window.location.href = '{{ path('app_songdetail', {'id': track.idspotify}) }}';">
+                            <div class="card-body"
+                                 onclick="window.location.href = '{{ path('app_songdetail', {'id': track.idspotify}) }}';">
                                 <h5 class="card-title">{{ track.name }}</h5>
                                 <p class="card-text">Artist: {{ track.artists }}</p>
                                 <p class="card-text">Album: {{ track.albumname }}</p>
