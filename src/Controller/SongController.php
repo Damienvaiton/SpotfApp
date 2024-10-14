@@ -8,7 +8,6 @@ use App\service\AuthSpotifyService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
@@ -153,20 +152,28 @@ class SongController extends AbstractController
         $track = $this->GetTrackFromId($id);
 
 
-        $firdtrack = $entityManager->getRepository(Track::class)->findOneBy(['id' => $id]);
+        $firdtrack = $entityManager->getRepository(Track::class)->findOneBy(['idspotify' => $id]);
+        $userfavorite = $user->getFavoriteTracks();
+
+        dump($firdtrack);
+
         if ($firdtrack === null) {
             $entityManager->persist($track);
             $user->addFavoriteTrack($track);
+
         } else {
-            $entityManager->remove($firdtrack);
-            $user->removeFavoriteTrack($firdtrack);
+            foreach ($userfavorite as $fav) {
+                if ($fav->getIdSpotify() ===
+                    $firdtrack->getIdSpotify()) {
+                    $user->removeFavoriteTrack($firdtrack);
+                    $entityManager->remove($firdtrack);
+                }
+            }
         }
+
         $entityManager->flush();
 
-
-        return $this->redirectToRoute('app_songdetail', ['id' => $id]);
-
-
+        return $this->redirectToRoute('app_personnal_favorite');
     }
 
 
@@ -189,10 +196,12 @@ class SongController extends AbstractController
     #[Route('/', name: 'app_songsearch')]
     public function search(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
+        if ($security->getUser() === null) {
+            return $this->redirectToRoute('app_login');
+        }
         $tracks = [];
         $form = $this->createFormBuilder()
             ->add('search', TextType::class, [
-                'label' => 'Search for a song',
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'Enter a song name',
@@ -200,7 +209,6 @@ class SongController extends AbstractController
 
                 ]
             ])
-            ->add('submit', SubmitType::class)
             ->setMethod('GET')
             ->getForm();
 

@@ -1,36 +1,80 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello SongController!{% endblock %}
-
+{% block title %}Login - SongController{% endblock %}
 
 {% block stylesheets %}
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #121212, #1DB954); /* Dégradé sombre inspiré de Spotify */
+            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+        .example-wrapper {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 400px; /* Limite la largeur pour le formulaire */
+        }
+        h1 {
+            margin-bottom: 30px;
+            font-size: 2rem;
+            text-align: center;
+            color: #1DB954; /* Couleur de titre inspirée de Spotify */
+        }
+        .form-control {
+            border-radius: 5px;
+            background-color: #2a2a2a; /* Fond des champs de formulaire sombre */
+            color: white;
+        }
+        .form-control::placeholder {
+            color: #b3b3b3; /* Couleur des placeholders */
+        }
+        .btn-primary {
+            border-radius: 5px;
+            background-color: #1DB954; /* Couleur du bouton inspirée de Spotify */
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #1aa34a; /* Couleur au survol */
+        }
+        .text-center a {
+            color: #1DB954; /* Couleur du lien inspirée de Spotify */
+            text-decoration: none;
+        }
+        .text-center a:hover {
+            text-decoration: underline; /* Soulignement au survol */
+        }
+    </style>
 {% endblock %}
 
 {% block javascripts %}
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 {% endblock %}
 
 {% block body %}
-    <style>
-
-    </style>
-
-    <div class="example-wrapper" >
+    <div class="example-wrapper">
         <h1>Login</h1>
-
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    {{ form(form) }}
-                </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <a href="{{ path('app_register') }}">Register</a>
-                </div>
+        {{ form_start(form, {'attr': {'class': 'form'}}) }}
+        <div class="form-group">
+            {{ form_row(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_row(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Password'}}) }}
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </div>
+        {{ form_end(form) }}
+        <div class="text-center mt-3">
+            <a href="{{ path('app_register') }}">Don't have an account? Register</a>
         </div>
     </div>
-
 {% endblock %}

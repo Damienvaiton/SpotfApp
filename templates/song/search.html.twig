@@ -5,162 +5,155 @@
 {% block stylesheets %}
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-{% endblock %}
-
-{% block javascripts %}
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-{% endblock %}
-
-{% block body %}
     <style>
+        body {
+            background: linear-gradient(to right, #1db954, #191414);
+            color: white;
+            height: 100vh;
+        }
+
         .example-wrapper {
             margin: 0.5em auto;
             max-width: 800px;
             width: 95%;
-            font: 18px/1.5 sans-serif;
-            align-items: center;
-            justify-content: center;
             display: flex;
             flex-direction: column;
+            align-items: center;
         }
 
-        .example-wrapper code {
-            background: #F5F5F5;
-            padding: 2px 6px;
-        }
-
-        .heart {
-            position: absolute;
-            top: 10px; /* Ajustez la position selon vos besoins */
-            right: 10px; /* Ajustez la position selon vos besoins */
-            color: red; /* Couleur du cœur */
-            font-size: 24px; /* Taille du cœur */
-            cursor: pointer; /* Curseur de la souris lors du survol */
-        }
-
-        .card {
-            position: relative; /* Nécessaire pour positionner l'icône à l'intérieur de la carte */
-        }
-
-        .glow-on-hover {
-            width: 220px;
-            height: 50px;
-            border: none;
-            outline: none;
-            color: #fff;
-            background: #111;
-            cursor: pointer;
-            position: relative;
-            z-index: 0;
-            border-radius: 10px;
-        }
-
-        .glow-on-hover:before {
-            content: '';
-            background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            background-size: 400%;
-            z-index: -1;
-            filter: blur(5px);
-            width: calc(100% + 4px);
-            height: calc(100% + 4px);
-            animation: glowing 20s linear infinite;
-            opacity: 0;
-            transition: opacity .3s ease-in-out;
-            border-radius: 10px;
-        }
-
-        .glow-on-hover:active {
-            color: #000
-        }
-
-        .glow-on-hover:active:after {
-            background: transparent;
-        }
-
-        .glow-on-hover:hover:before {
-            opacity: 1;
-        }
-
-        .glow-on-hover:after {
-            z-index: -1;
-            content: '';
-            position: absolute;
+        .form-group {
             width: 100%;
-            height: 100%;
-            background: #111;
-            left: 0;
-            top: 0;
-            border-radius: 10px;
+            margin-bottom: 20px;
         }
 
-        @keyframes glowing {
-            0% {
-                background-position: 0 0;
-            }
-            50% {
-                background-position: 400% 0;
-            }
-            100% {
-                background-position: 0 0;
-            }
+        .form-control {
+            border-radius: 20px;
+            padding: 15px 30px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: border 0.3s;
+            font-size: 1.2rem; /* Augmente la taille de la police */
+        }
+
+        .form-control:focus {
+            border-color: #1db954;
+            box-shadow: 0 0 5px rgba(29, 185, 84, 0.5);
+            outline: none;
         }
 
         .button-92 {
             --c: #fff;
-            /* text color */
             background: linear-gradient(90deg, #0000 33%, #fff5, #0000 67%) var(--_p, 100%)/300% no-repeat,
-            #004dff;
-            /* background color */
-            color: #0000;
+            #1db954;
+            color: #fff; /* Met le texte en blanc */
             border: none;
-            transform: perspective(500px) rotateY(calc(20deg * var(--_i, -1)));
-            text-shadow: calc(var(--_i, -1) * 0.08em) -.01em 0 var(--c),
-            calc(var(--_i, -1) * -0.08em) .01em 2px #0004;
-            outline-offset: .1em;
-            transition: 0.3s;
-        }
-
-        .button-92:hover,
-        .button-92:focus-visible {
-            --_p: 0%;
-            --_i: 1;
-        }
-
-        .button-92:active {
-            text-shadow: none;
-            color: var(--c);
-            transition: 0s;
-        }
-
-        .button-92 {
-            font-weight: bold;
-            font-size: 2rem;
-            margin: 0;
+            font-size: 1.5rem;
+            padding: 0.8em 1.5em;
+            border-radius: 20px;
             cursor: pointer;
-            padding: .1em .3em;
+            transition: 0.3s;
+            margin: 0 10px; /* Ajoute un espace entre les boutons */
         }
 
+        .button-92:hover {
+            --_p: 0%;
+        }
 
+        .submit-button {
+            border-radius: 20px;
+            padding: 15px 30px;
+            background-color: #1db954; /* Couleur du bouton */
+            color: white; /* Couleur du texte */
+            border: none;
+            font-size: 1.2rem; /* Taille de la police */
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background-color: #159a43; /* Couleur du bouton au survol */
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .card {
+            background-color: #282828; /* Fond sombre pour la carte */
+            border: none; /* Pas de bordure */
+            border-radius: 12px; /* Coins arrondis */
+            transition: transform 0.3s, box-shadow 0.3s; /* Ajout d'un effet de survol */
+        }
+
+        .card:hover {
+            transform: scale(1.05); /* Légère augmentation de taille au survol */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Ombre pour le relief */
+        }
+
+        .card-img-top {
+            border-top-left-radius: 12px; /* Coins arrondis */
+            border-top-right-radius: 12px; /* Coins arrondis */
+        }
+
+        .heart {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white; /* Couleur du cœur */
+            cursor: pointer; /* Curseur pointer pour le cœur */
+            font-size: 1.5rem; /* Taille de l'icône du cœur */
+        }
+
+        .card-title {
+            color: #1db954; /* Couleur du titre */
+        }
+
+        .card-text {
+            color: #b3b3b3; /* Couleur des textes */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px; /* Espace en bas des boutons */
+        }
     </style>
+{% endblock %}
 
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function toggleFavorite(url) {
+            fetch(url)
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        console.error('Erreur lors de la mise à jour des favoris');
+                    }
+                })
+                .catch(error => console.error('Erreur:', error));
+        }
+    </script>
+{% endblock %}
+
+{% block body %}
     <div class="container">
         <h1 class="my-4 text-center">Search for Tracks</h1>
 
-
-        <div style="display: flex ; justify-content: center; align-items: center; margin-bottom: 20px;
-
-">
-            <!-- Formulaire de recherche -->
-            <div class="row justify-content-center mb-5">
-                <div class="col-md-8 ">
-                    {{ form(form) }}
-                </div>
+        <div class="example-wrapper">
+            <div class="form-group">
+                {{ form_start(form, {'attr': {'class': 'form'}}) }}
+                {{ form_row(form.search, {'attr': {'class': 'form-control', 'placeholder': 'Search for a track'}}) }}
+                <button type="submit" class="submit-button">Search</button>
+                {{ form_end(form) }}
             </div>
-            <div>
+
+            <div class="button-container">
                 <button class="button-92" onclick="window.location.href = '{{ path('app_login') }}';">
                     {% if app.user %}
                         Logout
@@ -168,30 +161,24 @@
                         Login
                     {% endif %}
                 </button>
-            </div>
-            {% if app.user %}
 
-                <div>
-                    <button class="glow-on-hover"
-                            onclick="window.location.href = '{{ path('app_personnal_favorite') }}';">
+                {% if app.user %}
+                    <button class="button-92" onclick="window.location.href = '{{ path('app_personnal_favorite') }}';">
                         Favorite
                     </button>
-                </div>
-            {% endif %}
-
+                {% endif %}
+            </div>
         </div>
 
         <!-- Résultats de recherche -->
-        <div class="row">
+        <div class="row mt-4">
             {% if tracks is defined and tracks is not empty and tracks is not null %}
                 {% for track in tracks %}
                     <div class="col-md-4 mb-4">
                         <div class="card h-100 shadow-sm">
-                            <img src="{{ track.pictureLink }}" class="card-img-top" alt="{{ track.albumname }}"
-                                 style="height: 200px; object-fit: cover;">
+                            <img src="{{ track.pictureLink }}" class="card-img-top" alt="{{ track.albumname }}" style="height: 200px; object-fit: cover; border-radius: 12px;">
 
-                            <div class="heart"
-                                 onclick="window.location.href = '{{ path('app_favorite', {'id': track.idspotify}) }}';">
+                            <div class="heart" onclick="toggleFavorite('{{ path('app_favorite', {'id': track.idspotify}) }}');">
                                 {% if track.isFavorite %}
                                     <i class="fas fa-heart"></i> <!-- Cœur plein -->
                                 {% else %}
@@ -199,11 +186,16 @@
                                 {% endif %}
                             </div>
 
-                            <div class="card-body"
-                                 onclick="window.location.href = '{{ path('app_songdetail', {'id': track.idspotify}) }}';">
+                            <div class="card-body text-center" style="padding: 20px;">
                                 <h5 class="card-title">{{ track.name }}</h5>
                                 <p class="card-text">Artist: {{ track.artists }}</p>
                                 <p class="card-text">Album: {{ track.albumname }}</p>
+                            </div>
+
+                            <div class="card-footer text-center" style="background-color: #191414; border-top: none;">
+                                <button class="btn btn-outline-light"
+                                        onclick="window.location.href = '{{ path('app_songdetail', {'id': track.idspotify}) }}';"
+                                        style="border-radius: 20px; width: 100%;">Details</button>
                             </div>
                         </div>
                     </div>
@@ -214,5 +206,6 @@
                 </div>
             {% endif %}
         </div>
+
     </div>
 {% endblock %}

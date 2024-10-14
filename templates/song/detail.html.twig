@@ -1,32 +1,61 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello SongController!{% endblock %}
-
+{% block title %}Track Detail - SongController{% endblock %}
 
 {% block stylesheets %}
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212; /* Couleur de fond sombre inspirée de Spotify */
+            color: white; /* Couleur du texte claire pour le contraste */
+        }
+        .example-wrapper {
+            margin: 2em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            margin-bottom: 1.5em;
+            font-size: 2rem;
+            text-align: center;
+            color: #1DB954; /* Vert Spotify */
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.1); /* Cartes avec fond transparent */
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        .card-title {
+            font-size: 1.5rem;
+        }
+        .badge {
+            background-color: #1DB954; /* Badge vert Spotify pour les artistes */
+        }
+        .card-img-top {
+            height: 300px;
+            object-fit: cover;
+        }
+    </style>
 {% endblock %}
 
 {% block javascripts %}
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 {% endblock %}
 
 {% block body %}
-    <style>
-        .example-wrapper { margin: 0.5em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; align-items: center ; justify-content: center; display: flex; flex-direction: column; }
-        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-        .row { display: flex; flex-direction: row; align-items: center; justify-content: center; }
-    </style>
-
-    <div class="example-wrapper" >
-
-        <h1>Track detail</h1>
+    <div class="example-wrapper">
+        <h1>Détails de la Piste</h1>
 
         <div class="card mb-4" style="max-width: 600px;">
             <div class="row no-gutters">
                 <div class="col-md-4">
-                    <img src="{{ track.pictureLink}}" class="card-img" alt="{{ track.albumname }}" style="width: 100%; height: auto; object-fit: cover;">
+                    <img src="{{ track.pictureLink }}" class="card-img" alt="{{ track.albumname }}" style="width: 100%; height: auto; object-fit: cover;">
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
@@ -35,40 +64,33 @@
                             <strong>Liste des artistes :</strong>
                             <ul class="list-inline">
                                 {% for artist in track.artists %}
-                                    <li class="list-inline-item badge badge-primary">{{ artist.name }}</li>
+                                    <li class="list-inline-item badge">{{ artist.name }}</li>
                                 {% endfor %}
                             </ul>
                         </div>
-                        <p class="card-text">Nom album : <strong>{{ track.albumname }}</strong></p>
-                        <p class="card-text">Durée : {{ (track.durationMs // 60000) }} m {{ ((track.durationMs % 60000) // 1000) }} s </p>
-
+                        <p class="card-text">Nom de l'album : <strong>{{ track.albumname }}</strong></p>
+                        <p class="card-text">Durée : {{ (track.durationMs // 60000) }} m {{ ((track.durationMs % 60000) // 1000) }} s</p>
                     </div>
                 </div>
             </div>
         </div>
 
-            <h1>Recommandation</h1>
-            <div class="container">
-                <div class="row">
-                    {% for recommendation in recommendations.tracks %}
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100">
-                                <img src="{{ recommendation.album.images[0].url }}" class="card-img-top" alt="{{ recommendation.album.name }}" style="height: 300px; object-fit: cover;">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ recommendation.name }}</h5>
-                                    <p class="card-text">Artist: {{ recommendation.artists[0].name }}</p>
-                                    <p class="card-text">Album: {{ recommendation.album.name }}</p>
-                                </div>
+        <h1>Recommandations</h1>
+        <div class="container">
+            <div class="row">
+                {% for recommendation in recommendations.tracks %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <img src="{{ recommendation.album.images[0].url }}" class="card-img-top" alt="{{ recommendation.album.name }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ recommendation.name }}</h5>
+                                <p class="card-text">Artiste : {{ recommendation.artists[0].name }}</p>
+                                <p class="card-text">Album : {{ recommendation.album.name }}</p>
                             </div>
                         </div>
-                    {% endfor %}
-                </div>
+                    </div>
+                {% endfor %}
             </div>
-
-
         </div>
-
-
-
-
+    </div>
 {% endblock %}

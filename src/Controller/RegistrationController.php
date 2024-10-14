@@ -31,9 +31,6 @@ class RegistrationController extends AbstractController
         )->add(
             'password',
             PasswordType::class
-        )->add(
-            'register',
-            SubmitType::class
         )->setMethod('GET')->getForm();
 
         $form->handleRequest($request);
@@ -79,10 +76,6 @@ class RegistrationController extends AbstractController
         )->add(
             'password',
             PasswordType::class
-        )->
-        add(
-            'login',
-            SubmitType::class
         )->setMethod('GET')
             ->getForm();
 
