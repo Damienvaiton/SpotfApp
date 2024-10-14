@@ -33,10 +33,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    /**
+     * @var Collection<int, Track>
+     */
+    #[ORM\ManyToMany(targetEntity: Track::class)]
+    private Collection $favoriteTracks;
+
+
 
     public function __construct()
     {
-        $this->favoritetracks = new ArrayCollection();
+        $this->favoriteTracks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -117,24 +124,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Track>
      */
-    public function getFavoritetracks(): Collection
+    public function getFavoriteTracks(): Collection
     {
-        return $this->favoritetracks;
+        return $this->favoriteTracks;
     }
 
-    public function addFavoritetrack(Track $favoritetrack): static
+    public function addFavoriteTrack(Track $favoriteTrack): static
     {
-        if (!$this->favoritetracks->contains($favoritetrack)) {
-            $this->favoritetracks->add($favoritetrack);
+        if (!$this->favoriteTracks->contains($favoriteTrack)) {
+            $this->favoriteTracks->add($favoriteTrack);
         }
 
         return $this;
     }
 
-    public function removeFavoritetrack(Track $favoritetrack): static
+    public function removeFavoriteTrack(Track $favoriteTrack): static
     {
-        $this->favoritetracks->removeElement($favoritetrack);
+        $this->favoriteTracks->removeElement($favoriteTrack);
 
         return $this;
     }
+
 }

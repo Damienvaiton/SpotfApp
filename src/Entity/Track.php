@@ -67,7 +67,6 @@ class Track
     #[ORM\Column(type: 'string')]
     private ?string $pictureLink;
 
-    #[ORM\Column]
     private ?bool $isFavorite = null;
 
 
@@ -202,7 +201,7 @@ class Track
         return $this->isFavorite;
     }
 
-    public function setFavorite(bool $isFavorite): static
+    public function setIsFavorite(bool $isFavorite): static
     {
         $this->isFavorite = $isFavorite;
 

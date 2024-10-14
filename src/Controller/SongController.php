@@ -7,6 +7,7 @@ use App\Factory\TrackFactory;
 use App\service\AuthSpotifyService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpClient\HttpClient;
@@ -55,7 +56,6 @@ class SongController extends AbstractController
             ]
         ]);
 
-        dump($response->toArray());
 
         return $response->toArray();
 
@@ -90,7 +90,6 @@ class SongController extends AbstractController
 
         $trackfactory = new TrackFactory();
         $track = $trackfactory->createfromAPI($trackresult);
-        dump($track);
 
         return $this->render('song/detail.html.twig', [
             'controller_name' => 'SongController',
@@ -141,18 +140,23 @@ class SongController extends AbstractController
 
     }
 
+
+
     #[Route('/favorite/{id}', name: 'app_favorite')]
-    public function Favorite(EntityManagerInterface $entityManager, string $id)
+    public function Favorite(EntityManagerInterface $entityManager, string $id, Security $security): Response
     {
+        $user = $security->getUser();
+
         $track = $this->GetTrackFromId($id);
+
 
         $firdtrack = $entityManager->getRepository(Track::class)->findOneBy(['id' => $id]);
         if ($firdtrack === null) {
-            $track->setFavorite(true);
             $entityManager->persist($track);
+            $user->addFavoriteTrack($track);
         } else {
-            $firdtrack->setFavorite(false);
             $entityManager->remove($firdtrack);
+            $user->removeFavoriteTrack($firdtrack);
         }
         $entityManager->flush();
 
@@ -174,13 +178,12 @@ class SongController extends AbstractController
         $track = $response->toArray();
         $trackfactory = new TrackFactory();
         $result = $trackfactory->createfromAPI($track);
-        dump($result);
         return $result;
 
     }
 
     #[Route('/', name: 'app_songsearch')]
-    public function search(Request $request, EntityManagerInterface $entityManager): Response
+    public function search(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
         $tracks = [];
         $form = $this->createFormBuilder()
@@ -212,11 +215,18 @@ class SongController extends AbstractController
             $trackfactory = new TrackFactory();
             $tracks = $trackfactory->createfromAPIArray($tracksresult['tracks']);
             foreach ($tracks as $track) {
-                $firdtrack = $entityManager->getRepository(Track::class)->findOneBy(['id' => $track->getId()]);
-                if ($firdtrack !== null) {
-                    $track->setFavorite(true);
+            }
+            $userfavorite = $security->getUser()->getFavoriteTracks();
+
+            //Check if the track was in the user's favorite
+            foreach ($tracks as $track) {
+                foreach ($userfavorite as $fav) {
+                    if ($track->getIdspotify() === $fav->getIdspotify()) {
+                        $track->setIsFavorite(true);
+                    }
                 }
             }
+
         }
         return $this->render('song/search.html.twig', [
             'controller_name' => 'SongController',

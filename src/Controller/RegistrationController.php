@@ -41,6 +41,7 @@ class RegistrationController extends AbstractController
         )->setMethod('GET')->getForm();
 
         $form->handleRequest($request);
+        dump($form->getData());
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
