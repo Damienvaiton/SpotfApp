@@ -14,7 +14,6 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 
 class SongController extends AbstractController
@@ -99,12 +98,6 @@ class SongController extends AbstractController
     }
 
 
-
-// Fonctions GET
-//
-//
-//
-
     public function GetDetailTrack(string $id): array
     {
 
@@ -141,6 +134,16 @@ class SongController extends AbstractController
     }
 
 
+    #[Route('/favorite', name: 'app_personnal_favorite')]
+    public function FavoriteList(Security $security): Response
+    {
+        $user = $security->getUser();
+        $tracks = $user->getFavoriteTracks();
+        return $this->render('song/favorite.html.twig', [
+            'controller_name' => 'SongController',
+            'tracks' => $tracks,
+        ]);
+    }
 
     #[Route('/favorite/{id}', name: 'app_favorite')]
     public function Favorite(EntityManagerInterface $entityManager, string $id, Security $security): Response
@@ -165,6 +168,7 @@ class SongController extends AbstractController
 
 
     }
+
 
     public function GetTrackFromId(string $id): Track
     {
