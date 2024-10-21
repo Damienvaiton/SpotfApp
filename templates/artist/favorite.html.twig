@@ -1,0 +1,161 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Discover Artists{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #121212; /* Fond sombre */
+            color: white;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            padding: 20px;
+        }
+
+        .my-4 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .artist-card {
+            border-radius: 15px;
+            background-color: #282828; /* Couleur du conteneur principal */
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .card {
+            background-color: #333333; /* Couleur de chaque carte */
+            border: none;
+            border-radius: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: scale(1.05); /* Effet de survol */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-img-top {
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            max-height: 250px; /* Hauteur maximale pour les images */
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .card-text {
+            color: #b3b3b3; /* Couleur du texte des cartes */
+            font-size: 1rem;
+        }
+
+        .favorite-button {
+            background-color: #1DB954; /* Couleur de fond du bouton */
+            color: white; /* Couleur du texte */
+            padding: 10px 20px; /* Padding pour le bouton */
+            font-size: 1rem;
+            border-radius: 20px; /* Arrondir les bords */
+            transition: background-color 0.3s, transform 0.2s;
+            border: none; /* Suppression de la bordure */
+        }
+
+        .remove-button {
+            background-color: #ff4757; /* Couleur de fond pour le bouton de suppression */
+            color: white;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .remove-button:hover {
+            background-color: #e84118; /* Couleur au survol */
+        }
+
+        /* Ajout d'un style pour les icônes */
+        .icon {
+            color: #b3b3b3; /* Couleur des icônes */
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function removeFavorite(artistId) {
+            if (confirm("Are you sure you want to remove this artist from your favorites?")) {
+                // Envoie une requête à la route de suppression
+                fetch('{{ path('app_favoriteArtist', {'id': '__id__'}) }}'.replace('__id__', artistId), {
+                    method: 'DELETE'
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            // Recharge la page ou retire l'artiste de la liste
+                            location.reload(); // Recharger la page après la suppression
+                        } else {
+                            alert("An error occurred while trying to remove the artist.");
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="artist-card">
+            <h1 class="my-4">Favorite Artists</h1>
+            <div class="artist-body mt-4">
+                {% if artists is defined and artists is not empty %}
+                    <div class="row">
+                        {% for artist in artists %}
+                            <div class="col-md-4 mb-4">
+                                <div class="card">
+                                    <img class="card-img-top" src="{{ artist.imagesUrl }}" alt="{{ artist.name }}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ artist.name }}</h5>
+                                        <p class="card-text"><i class="fas fa-users icon"></i> {{ artist.followers|number_format(0, '.', ' ') }} followers</p>
+                                        <p class="card-text"><i class="fas fa-star icon"></i> {{ artist.popularity }} popularity</p>
+                                        <button class="favorite-button mt-2"
+                                                onclick="window.location.href = '{{ path('app_artist_details', {'id': artist.idspotify}) }}';">
+                                            Details
+                                        </button>
+                                        <button class="remove-button mt-2" onclick="removeFavorite('{{ artist.idspotify }}')">
+                                            Remove from Favorites
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-center">No favorite artists found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

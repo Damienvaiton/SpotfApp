@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Artist;
 use App\Factory\ArtistFactory;
 use App\service\AuthSpotifyService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -67,9 +69,18 @@ class ArtistController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $artistsresult = $this->GetArtistFromName($data['search']);
-
             $artistsfactory = new ArtistFactory();
             $artists = $artistsfactory->createfromAPIArray($artistsresult['artists']);
+
+
+            foreach ($artists as $artist) {
+                $userfavorite = $security->getUser()->getFavoriteArtists();
+                foreach ($userfavorite as $fav) {
+                    if ($artist->getIdspotify() === $fav->getIdspotify()) {
+                        $artist->setIsFavorite(true);
+                    }
+                }
+            }
 
         }
         return $this->render('artist/searchedArtist.html.twig', [
@@ -97,7 +108,46 @@ class ArtistController extends AbstractController
         ]);
     }
 
+    #[Route('/favorite', name: 'app_personnal_favoriteArtist')]
+    public function FavoriteArtistList(Security $security): Response
+    {
+        $user = $security->getUser();
+        $artists = $user->getFavoriteArtists();
+        dump($artists);
+        return $this->render('artist/favorite.html.twig', [
+            'controller_name' => 'ArtistController',
+            'artists' => $artists,
+        ]);
+    }
 
+    #[Route('/favoriteArtist/{id}', name: 'app_favoriteArtist')]
+    public function favoriteArtist(EntityManagerInterface $entityManager, string $id, Security $security): Response
+    {
+        $user = $security->getUser();
+        $artist = $this->GetArtistFromId($id);
+
+        $artistFactory = new ArtistFactory();
+        $artist = $artistFactory->createfromAPI($artist);
+
+        $findArtist = $entityManager->getRepository(Artist::class)->findOneBy(['idspotify' => $artist->getIdspotify()]);
+        $userFavoriteArtist = $user->getFavoriteArtists();
+
+        if ($findArtist === null) {
+            $entityManager->persist($artist);
+            $user->addFavoriteArtist($artist);
+            $entityManager->flush();
+        } else {
+            foreach ($userFavoriteArtist as $item) {
+                if ($item->getIdspotify() === $artist->getIdspotify()) {
+                    $user->removeFavoriteArtist($item);
+                    $entityManager->flush();
+                    return $this->redirectToRoute('app_artist_details', ['id' => $id]);
+                }
+
+            }
+        }
+        return $this->redirectToRoute('app_artist_details', ['id' => $id]);
+    }
 
     public function GetArtistFromName (string $name) : array
     {

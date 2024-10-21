@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello SongController!{% endblock %}
+{% block title %}Search for Tracks{% endblock %}
 
 {% block stylesheets %}
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -9,16 +9,32 @@
         body {
             background: linear-gradient(to right, #1db954, #191414);
             color: white;
-            height: 100vh;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Arial', sans-serif;
         }
 
-        .example-wrapper {
-            margin: 0.5em auto;
+        .artist-card {
+            background-color: #282828;
+            border-radius: 15px;
+            padding: 2em;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            margin: auto;
             max-width: 800px;
-            width: 95%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            width: 90%;
+        }
+
+        .artist-header {
+            text-align: center;
+            border-bottom: 2px solid #1DB954;
+            padding-bottom: 1.5em;
+        }
+
+        .artist-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1em;
+            color: #1DB954;
         }
 
         .form-group {
@@ -28,97 +44,74 @@
 
         .form-control {
             border-radius: 20px;
-            padding: 15px 30px;
+            padding: 15px 20px;
             background-color: rgba(255, 255, 255, 0.1);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.6);
             transition: border 0.3s;
-            font-size: 1.2rem; /* Augmente la taille de la police */
         }
 
         .form-control:focus {
             border-color: #1db954;
             box-shadow: 0 0 5px rgba(29, 185, 84, 0.5);
-            outline: none;
         }
 
-        .button-92 {
-            --c: #fff;
-            background: linear-gradient(90deg, #0000 33%, #fff5, #0000 67%) var(--_p, 100%)/300% no-repeat,
-            #1db954;
-            color: #fff; /* Met le texte en blanc */
-            border: none;
-            font-size: 1.5rem;
-            padding: 0.8em 1.5em;
+        .spotify-button {
             border-radius: 20px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin: 0 10px; /* Ajoute un espace entre les boutons */
-        }
-
-        .button-92:hover {
-            --_p: 0%;
-        }
-
-        .submit-button {
-            border-radius: 20px;
-            padding: 15px 30px;
-            background-color: #1db954; /* Couleur du bouton */
-            color: white; /* Couleur du texte */
+            padding: 12px 25px;
+            background-color: #1db954;
+            color: white;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: background-color 0.3s, transform 0.2s;
             border: none;
-            font-size: 1.2rem; /* Taille de la police */
-            transition: background-color 0.3s;
-            cursor: pointer;
+            width: 100%;
+            margin-bottom: 1em;
         }
 
-        .submit-button:hover {
-            background-color: #159a43; /* Couleur du bouton au survol */
-        }
-
-        h1 {
-            margin-bottom: 30px;
-            font-size: 2rem;
-            text-align: center;
+        .spotify-button:hover {
+            background-color: #159a43;
+            transform: scale(1.05);
         }
 
         .card {
-            background-color: #282828; /* Fond sombre pour la carte */
-            border: none; /* Pas de bordure */
-            border-radius: 12px; /* Coins arrondis */
-            transition: transform 0.3s, box-shadow 0.3s; /* Ajout d'un effet de survol */
+            background-color: #282828;
+            border: none;
+            border-radius: 12px;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .card:hover {
-            transform: scale(1.05); /* Légère augmentation de taille au survol */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Ombre pour le relief */
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .card-img-top {
-            border-top-left-radius: 12px; /* Coins arrondis */
-            border-top-right-radius: 12px; /* Coins arrondis */
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
         }
 
         .heart {
             position: absolute;
             top: 10px;
             right: 10px;
-            color: white; /* Couleur du cœur */
-            cursor: pointer; /* Curseur pointer pour le cœur */
-            font-size: 1.5rem; /* Taille de l'icône du cœur */
+            color: white;
+            cursor: pointer;
+            font-size: 1.5rem;
         }
 
         .card-title {
-            color: #1db954; /* Couleur du titre */
+            color: #1db954;
         }
 
         .card-text {
-            color: #b3b3b3; /* Couleur des textes */
+            color: #b3b3b3;
         }
 
         .button-container {
             display: flex;
             justify-content: center;
-            margin-bottom: 20px; /* Espace en bas des boutons */
+            margin-bottom: 20px;
         }
     </style>
 {% endblock %}
@@ -143,69 +136,62 @@
 
 {% block body %}
     <div class="container">
-        <h1 class="my-4 text-center">Search for Tracks</h1>
+        <div class="artist-card">
+            <div class="artist-header">
+                <h1>Search for Tracks</h1>
+                <div class="form-group">
+                    {{ form_start(form, {'attr': {'class': 'form'}}) }}
+                    {{ form_row(form.search, {'attr': {'class': 'form-control', 'placeholder': 'Search for a track'}}) }}
+                    <button type="submit" class="spotify-button">Search</button>
+                    {{ form_end(form) }}
+                </div>
 
-        <div class="example-wrapper">
-            <div class="form-group">
-                {{ form_start(form, {'attr': {'class': 'form'}}) }}
-                {{ form_row(form.search, {'attr': {'class': 'form-control', 'placeholder': 'Search for a track'}}) }}
-                <button type="submit" class="submit-button">Search</button>
-                {{ form_end(form) }}
+                <div class="button-container">
+                    {% if app.user %}
+                        <button class="spotify-button" type="button" onclick="window.location.href = '{{ path('app_personnal_favorite') }}';">
+                            Favorite
+                        </button>
+                    {% endif %}
+                </div>
             </div>
 
-            <div class="button-container">
-                <button class="button-92" onclick="window.location.href = '{{ path('app_login') }}';">
-                    {% if app.user %}
-                        Logout
-                    {% else %}
-                        Login
-                    {% endif %}
-                </button>
+            <!-- Résultats de recherche -->
+            <div class="row mt-4">
+                {% if tracks is defined and tracks is not empty and tracks is not null %}
+                    {% for track in tracks %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <img src="{{ track.pictureLink }}" class="card-img-top" alt="{{ track.albumname }}" style="height: 200px; object-fit: cover; border-radius: 12px;">
 
-                {% if app.user %}
-                    <button class="button-92" onclick="window.location.href = '{{ path('app_personnal_favorite') }}';">
-                        Favorite
-                    </button>
+                                <div class="heart" onclick="toggleFavorite('{{ path('app_favorite', {'id': track.idspotify}) }}');">
+                                    {% if track.isFavorite %}
+                                        <i class="fas fa-heart"></i>
+                                    {% else %}
+                                        <i class="far fa-heart"></i>
+                                    {% endif %}
+                                </div>
+
+                                <div class="card-body text-center" style="padding: 20px;">
+                                    <h5 class="card-title">{{ track.name }}</h5>
+                                    <p class="card-text">Artist: {{ track.artists }}</p>
+                                    <p class="card-text">Album: {{ track.albumname }}</p>
+                                </div>
+
+                                <div class="card-footer text-center" style="background-color: #191414; border-top: none;">
+                                    <button class="spotify-button"
+                                            onclick="window.location.href = '{{ path('app_songdetail', {'id': track.idspotify}) }}';">
+                                        Details
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <h2 class="text-center">No track found</h2>
+                    </div>
                 {% endif %}
             </div>
         </div>
-
-        <!-- Résultats de recherche -->
-        <div class="row mt-4">
-            {% if tracks is defined and tracks is not empty and tracks is not null %}
-                {% for track in tracks %}
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100 shadow-sm">
-                            <img src="{{ track.pictureLink }}" class="card-img-top" alt="{{ track.albumname }}" style="height: 200px; object-fit: cover; border-radius: 12px;">
-
-                            <div class="heart" onclick="toggleFavorite('{{ path('app_favorite', {'id': track.idspotify}) }}');">
-                                {% if track.isFavorite %}
-                                    <i class="fas fa-heart"></i> <!-- Cœur plein -->
-                                {% else %}
-                                    <i class="far fa-heart"></i> <!-- Cœur vide -->
-                                {% endif %}
-                            </div>
-
-                            <div class="card-body text-center" style="padding: 20px;">
-                                <h5 class="card-title">{{ track.name }}</h5>
-                                <p class="card-text">Artist: {{ track.artists }}</p>
-                                <p class="card-text">Album: {{ track.albumname }}</p>
-                            </div>
-
-                            <div class="card-footer text-center" style="background-color: #191414; border-top: none;">
-                                <button class="btn btn-outline-light"
-                                        onclick="window.location.href = '{{ path('app_songdetail', {'id': track.idspotify}) }}';"
-                                        style="border-radius: 20px; width: 100%;">Details</button>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <div class="col-12">
-                    <h2 class="text-center">No track found</h2>
-                </div>
-            {% endif %}
-        </div>
-
     </div>
 {% endblock %}

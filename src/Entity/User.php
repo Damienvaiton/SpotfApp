@@ -39,11 +39,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Track::class)]
     private Collection $favoriteTracks;
 
+    /**
+     * @var Collection<int, Artist>
+     */
+    #[ORM\ManyToMany(targetEntity: Artist::class)]
+    private Collection $favoriteArtists;
+
 
 
     public function __construct()
     {
         $this->favoriteTracks = new ArrayCollection();
+        $this->favoriteArtists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -141,6 +148,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeFavoriteTrack(Track $favoriteTrack): static
     {
         $this->favoriteTracks->removeElement($favoriteTrack);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Artist>
+     */
+    public function getFavoriteArtists(): Collection
+    {
+        return $this->favoriteArtists;
+    }
+
+    public function addFavoriteArtist(Artist $favoriteArtist): static
+    {
+        if (!$this->favoriteArtists->contains($favoriteArtist)) {
+            $this->favoriteArtists->add($favoriteArtist);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoriteArtist(Artist $favoriteArtist): static
+    {
+        $this->favoriteArtists->removeElement($favoriteArtist);
 
         return $this;
     }

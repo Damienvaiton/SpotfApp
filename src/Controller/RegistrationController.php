@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use function PHPUnit\Framework\throwException;
 
 
 class RegistrationController extends AbstractController
@@ -34,7 +35,6 @@ class RegistrationController extends AbstractController
         )->setMethod('GET')->getForm();
 
         $form->handleRequest($request);
-        dump($form->getData());
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
@@ -89,6 +89,9 @@ class RegistrationController extends AbstractController
                     $security->login($user);
                     return $this->redirectToRoute('app_songsearch');
                 }
+            }
+            else {
+                throwException(new \Exception('User not found'));
             }
         }
 

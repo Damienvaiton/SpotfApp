@@ -37,6 +37,8 @@ class Artist
     #[ORM\Column]
     private string $imagesUrl;
 
+    private bool $isFavorite;
+
     public function __construct(string $name, string $popularity, string $Uri, int $followers, string $href, string $idspotify, string $type, string $imagesUrl)
     {
         $this->name = $name;
@@ -47,6 +49,7 @@ class Artist
         $this->idspotify = $idspotify;
         $this->type = $type;
         $this->imagesUrl = $imagesUrl;
+        $this->isFavorite = false;
     }
 
     /**
@@ -118,5 +121,15 @@ class Artist
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function IsFavorite(): bool
+    {
+        return $this->isFavorite;
+    }
+
+    public function setIsFavorite(bool $isFavorite): void
+    {
+        $this->isFavorite = $isFavorite;
     }
 }

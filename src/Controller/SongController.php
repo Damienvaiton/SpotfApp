@@ -205,8 +205,7 @@ class SongController extends AbstractController
 
         $track = $response->toArray();
         $trackfactory = new TrackFactory();
-        $result = $trackfactory->createfromAPI($track);
-        return $result;
+        return $trackfactory->createfromAPI($track);
 
     }
 
