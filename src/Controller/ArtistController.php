@@ -155,7 +155,7 @@ class ArtistController extends AbstractController
         return $response->toArray();
     }
 
-    #[Route('/favorite', name: 'app_personnal_favoriteArtist')]
+    #[Route('/Afavorite', name: 'app_personnal_favoriteArtist')]
     public function FavoriteArtistList(Security $security): Response
     {
         $user = $security->getUser();

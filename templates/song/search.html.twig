@@ -21,8 +21,8 @@
             padding: 2em;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
             margin: auto;
-            max-width: 800px;
-            width: 90%;
+            max-width: 1200px; /* Augmentation de la largeur maximale */
+            width: 100%;
         }
 
         .artist-header {
@@ -75,11 +75,14 @@
         }
 
         .card {
-            background-color: #282828;
-            border: none;
+            background-color: #383838; /* Couleur de fond légèrement plus claire */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Bordure légère */
             border-radius: 12px;
             transition: transform 0.3s, box-shadow 0.3s;
+            width: 100%; /* Utilisation maximale de l'espace */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7); /* Ombre plus prononcée */
         }
+
 
         .card:hover {
             transform: scale(1.05);
@@ -89,15 +92,30 @@
         .card-img-top {
             border-top-left-radius: 12px;
             border-top-right-radius: 12px;
+            height: 250px; /* Augmentation de la hauteur de l'image */
+            object-fit: cover;
         }
 
-        .heart {
+        /* Styles du cœur avec l'animation */
+        .favorite-icon {
             position: absolute;
             top: 10px;
             right: 10px;
-            color: white;
             cursor: pointer;
-            font-size: 1.5rem;
+            font-size: 2em; /* Taille augmentée du cœur */
+            color: #b3b3b3;
+            transition: color 0.3s ease, transform 0.2s ease;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            padding: 5px;
+        }
+
+        .favorite-icon.favorited {
+            color: #e63946;
+        }
+
+        .favorite-icon.favorited:hover {
+            transform: scale(1.3);
         }
 
         .card-title {
@@ -106,6 +124,10 @@
 
         .card-text {
             color: #b3b3b3;
+        }
+
+        audio {
+            width: 100%; /* Élargir l'élément audio */
         }
 
         .button-container {
@@ -120,16 +142,26 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        function toggleFavorite(url) {
+        function toggleFavorite(url, element) {
             fetch(url)
                 .then(response => {
                     if (response.ok) {
-                        window.location.reload();
+                        // Toggle the favorited class
+                        element.classList.toggle('favorited');
+                        // Update the icon based on the new state
+                        const icon = element.querySelector('i');
+                        if (element.classList.contains('favorited')) {
+                            icon.classList.remove('far', 'fa-heart'); // Remove empty heart
+                            icon.classList.add('fas', 'fa-heart'); // Add filled heart
+                        } else {
+                            icon.classList.remove('fas', 'fa-heart'); // Remove filled heart
+                            icon.classList.add('far', 'fa-heart'); // Add empty heart
+                        }
                     } else {
-                        console.error('Erreur lors de la mise à jour des favoris');
+                        console.error('Error updating favorites');
                     }
                 })
-                .catch(error => console.error('Erreur:', error));
+                .catch(error => console.error('Error:', error));
         }
     </script>
 {% endblock %}
@@ -148,7 +180,8 @@
 
                 <div class="button-container">
                     {% if app.user %}
-                        <button class="spotify-button" type="button" onclick="window.location.href = '{{ path('app_personnal_favorite') }}';">
+                        <button class="spotify-button" type="button"
+                                onclick="window.location.href = '{{ path('app_personnal_favorite') }}';">
                             Favorite
                         </button>
                     {% endif %}
@@ -161,23 +194,26 @@
                     {% for track in tracks %}
                         <div class="col-md-4 mb-4">
                             <div class="card h-100 shadow-sm">
-                                <img src="{{ track.pictureLink }}" class="card-img-top" alt="{{ track.albumname }}" style="height: 200px; object-fit: cover; border-radius: 12px;">
+                                <img src="{{ track.pictureLink }}" class="card-img-top" alt="{{ track.albumname }}"
+                                     style="border-radius: 12px;">
 
-                                <div class="heart" onclick="toggleFavorite('{{ path('app_favorite', {'id': track.idspotify}) }}');">
-                                    {% if track.isFavorite %}
-                                        <i class="fas fa-heart"></i>
-                                    {% else %}
-                                        <i class="far fa-heart"></i>
-                                    {% endif %}
+                                <div class="favorite-icon {% if track.isFavorite %}favorited{% endif %}"
+                                     onclick="toggleFavorite('{{ path('app_favorite', {'id': track.idspotify}) }}', this);">
+                                    <i class="{% if track.isFavorite %}fas fa-heart{% else %}far fa-heart{% endif %}"></i>
                                 </div>
 
-                                <div class="card-body text-center" style="padding: 20px;">
+                                <div class="card-body text-center">
                                     <h5 class="card-title">{{ track.name }}</h5>
                                     <p class="card-text">Artist: {{ track.artists }}</p>
                                     <p class="card-text">Album: {{ track.albumname }}</p>
+                                    <audio preload="auto" controls>
+                                        <source src="{{ track.previewUrl }}" type="audio/mpeg">
+                                        Your browser does not support the audio element. Please update your browser.
+                                    </audio>
                                 </div>
 
-                                <div class="card-footer text-center" style="background-color: #191414; border-top: none;">
+                                <div class="card-footer text-center"
+                                     style="background-color: #191414; border-top: none;">
                                     <button class="spotify-button"
                                             onclick="window.location.href = '{{ path('app_songdetail', {'id': track.idspotify}) }}';">
                                         Details
