@@ -7,10 +7,10 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -89,9 +89,8 @@ class RegistrationController extends AbstractController
                     $security->login($user);
                     return $this->redirectToRoute('app_songsearch');
                 }
-            }
-            else {
-                throwException(new \Exception('User not found'));
+            } else {
+                throwException(new Exception('User not found'));
             }
         }
 

@@ -96,24 +96,6 @@ class SongController extends AbstractController
         ]);
     }
 
-    public function GetTrackFromArtist(string $id): array
-    {
-
-            $client = HttpClient::create();
-            //
-            $ArtistId = $id;
-
-            $response = $client->request('GET', 'https://api.spotify.com/v1/artists/' . $ArtistId . '/top-tracks?market=FR', [
-                'headers' => [
-                    'authorization' => 'Bearer ' . $this->token,
-
-                ]
-            ]);
-
-            return $response->toArray();
-    }
-
-
     public function GetDetailTrack(string $id): array
     {
 
@@ -149,6 +131,22 @@ class SongController extends AbstractController
 
     }
 
+    public function GetTrackFromArtist(string $id): array
+    {
+
+        $client = HttpClient::create();
+        //
+        $ArtistId = $id;
+
+        $response = $client->request('GET', 'https://api.spotify.com/v1/artists/' . $ArtistId . '/top-tracks?market=FR', [
+            'headers' => [
+                'authorization' => 'Bearer ' . $this->token,
+
+            ]
+        ]);
+
+        return $response->toArray();
+    }
 
     #[Route('/favorite', name: 'app_personnal_favorite')]
     public function FavoriteList(Security $security): Response

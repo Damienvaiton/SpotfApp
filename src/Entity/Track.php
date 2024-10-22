@@ -8,16 +8,16 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class Track
 {
-   #[ORM\Id]
+    #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private int $id;
 
 
-   #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer')]
     private int $discNumber;
 
-   #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer')]
     private int $durationMs;
 
     #[ORM\Column(type: 'boolean')]
@@ -70,26 +70,26 @@ class Track
     private ?bool $isFavorite = null;
 
 
-
     public function __construct(
-        int $discNumber,
-        int $durationMs,
-        bool $explicit,
-        string $isrc,
-        string $albumname,
-        string $spotifyUrl,
-        string $artists,
-        string $href,
-        string $idspotify,
-        bool $isLocal,
-        string $name,
-        int $popularity,
+        int     $discNumber,
+        int     $durationMs,
+        bool    $explicit,
+        string  $isrc,
+        string  $albumname,
+        string  $spotifyUrl,
+        string  $artists,
+        string  $href,
+        string  $idspotify,
+        bool    $isLocal,
+        string  $name,
+        int     $popularity,
         ?string $previewUrl,
-        int $trackNumber,
-        string $type,
-        string $uri,
+        int     $trackNumber,
+        string  $type,
+        string  $uri,
         ?string $pictureLink
-    ) {
+    )
+    {
         $this->discNumber = $discNumber;
         $this->durationMs = $durationMs;
         $this->explicit = $explicit;

@@ -26,19 +26,6 @@ class ArtistController extends AbstractController
         $this->token = $this->authSpotifyService->auth();
     }
 
-    public function GetArtist(): array
-    {
-        $client = HttpClient::create();
-        $id = "06HL4z0CvFAxyc27GXpf02";
-        $response = $client->request('GET', 'https://api.spotify.com/v1/artists/' . $id, [
-            'headers' => [
-                'authorization' => 'Bearer ' . $this->token,
-            ]
-        ]);
-
-        return $response->toArray();
-    }
-
     #[Route('/artist', name: 'app_artist')]
     public function index(): Response
     {
@@ -52,8 +39,21 @@ class ArtistController extends AbstractController
         ]);
     }
 
+    public function GetArtist(): array
+    {
+        $client = HttpClient::create();
+        $id = "06HL4z0CvFAxyc27GXpf02";
+        $response = $client->request('GET', 'https://api.spotify.com/v1/artists/' . $id, [
+            'headers' => [
+                'authorization' => 'Bearer ' . $this->token,
+            ]
+        ]);
+
+        return $response->toArray();
+    }
+
     #[Route('/searchedArtist', name: 'app_searchedArtist')]
-    public function searchedArtist(Request $request,Security $security): Response
+    public function searchedArtist(Request $request, Security $security): Response
     {
         if ($security->getUser() === null) {
             return $this->redirectToRoute('app_login');
@@ -89,6 +89,18 @@ class ArtistController extends AbstractController
         ]);
     }
 
+    public function GetArtistFromName(string $name): array
+    {
+        $client = HttpClient::create();
+        $response = $client->request('GET', 'https://api.spotify.com/v1/search?q=' . $name . '&type=artist', [
+            'headers' => [
+                'authorization' => 'Bearer ' . $this->token,
+            ]
+        ]);
+
+        return $response->toArray();
+    }
+
     #[Route('/artist/{id}/details', name: 'app_artist_details')]
     public function artistDetails(string $id): Response
     {
@@ -106,6 +118,41 @@ class ArtistController extends AbstractController
             'recommendations' => $recommendations,
 
         ]);
+    }
+
+    public function GetArtistFromId(string $id): array
+    {
+        $client = HttpClient::create();
+        $response = $client->request('GET', 'https://api.spotify.com/v1/artists/' . $id, [
+            'headers' => [
+                'authorization' => 'Bearer ' . $this->token,
+            ]
+        ]);
+        return $response->toArray();
+    }
+
+    public function GetArtistAlbums(string $id): array
+    {
+        $client = HttpClient::create();
+        $response = $client->request('GET', 'https://api.spotify.com/v1/artists/' . $id . '/albums', [
+            'headers' => [
+                'authorization' => 'Bearer ' . $this->token,
+            ]
+        ]);
+
+        return $response->toArray();
+    }
+
+    public function GetArtistRecommendations(string $id): array
+    {
+        $client = HttpClient::create();
+        $response = $client->request('GET', 'https://api.spotify.com/v1/artists/' . $id . '/related-artists', [
+            'headers' => [
+                'authorization' => 'Bearer ' . $this->token,
+            ]
+        ]);
+
+        return $response->toArray();
     }
 
     #[Route('/favorite', name: 'app_personnal_favoriteArtist')]
@@ -148,54 +195,6 @@ class ArtistController extends AbstractController
         }
         return $this->redirectToRoute('app_artist_details', ['id' => $id]);
     }
-
-    public function GetArtistFromName (string $name) : array
-    {
-        $client = HttpClient::create();
-        $response = $client->request('GET', 'https://api.spotify.com/v1/search?q=' . $name . '&type=artist', [
-            'headers' => [
-                'authorization' => 'Bearer ' . $this->token,
-            ]
-        ]);
-
-        return $response->toArray();
-    }
-
-    public function GetArtistRecommendations(string $id) : array
-    {
-        $client = HttpClient::create();
-        $response = $client->request('GET', 'https://api.spotify.com/v1/artists/' . $id . '/related-artists', [
-            'headers' => [
-                'authorization' => 'Bearer ' . $this->token,
-            ]
-        ]);
-
-        return $response->toArray();
-    }
-
-    public function GetArtistFromId(string $id) : array
-    {
-        $client = HttpClient::create();
-        $response = $client->request('GET', 'https://api.spotify.com/v1/artists/' . $id, [
-            'headers' => [
-                'authorization' => 'Bearer ' . $this->token,
-            ]
-        ]);
-        return $response->toArray();
-    }
-
-    public function GetArtistAlbums(string $id) : array
-    {
-        $client = HttpClient::create();
-        $response = $client->request('GET', 'https://api.spotify.com/v1/artists/' . $id . '/albums', [
-            'headers' => [
-                'authorization' => 'Bearer ' . $this->token,
-            ]
-        ]);
-
-        return $response->toArray();
-    }
-
 
 
 }

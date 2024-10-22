@@ -4,7 +4,6 @@ namespace App\service;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class AuthSpotifyService
 {

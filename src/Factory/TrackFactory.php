@@ -6,7 +6,17 @@ use App\Entity\Track;
 
 class TrackFactory
 {
-    public function createfromAPI(array $track) : Track
+    public function createfromAPIArray(array $tracks): array
+    {
+        $track = [];
+        foreach ($tracks['items'] as $tr) {
+            $track[] = $this->createfromAPI($tr);
+        }
+
+        return $track;
+    }
+
+    public function createfromAPI(array $track): Track
     {
         return new Track(
             $track['disc_number'],
@@ -29,23 +39,12 @@ class TrackFactory
         );
     }
 
-    public function feats(array $track) : string
+    public function feats(array $track): string
     {
         $feats = '';
         foreach ($track['artists'] as $artist) {
             $feats .= $artist['name'] . ', ';
         }
         return substr($feats, 0, -2);
-    }
-
-
-    public function createfromAPIArray(array $tracks) : array
-    {
-        $track = [];
-        foreach ($tracks['items'] as $tr) {
-            $track[] = $this->createfromAPI($tr);
-        }
-
-        return $track;
     }
 }
